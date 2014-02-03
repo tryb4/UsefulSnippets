@@ -22,6 +22,13 @@ public class Selection implements Iterable< Block >
 		
 		this.min = new Location(min.getWorld(), Math.min(min.getX() , max.getX()), Math.min(min.getY() , max.getY()), Math.min(min.getZ() , max
 				.getZ()));
+		
+		this.blockinfo = new ArrayList< BlockInfo >();
+		
+		for ( Block b : this )
+		{
+			this.blockinfo.add(new BlockInfo(b));
+		}
 	}
 	
 	public Location getMin()
@@ -36,8 +43,8 @@ public class Selection implements Iterable< Block >
 	
 	public boolean containsPoint(Location loc)
 	{
-		return loc.getX() > min.getX() && loc.getX() < max.getX() && loc.getY() > min.getY() && loc.getY() < max.getY() && loc.getZ() > min.getZ()
-				&& loc.getZ() < max.getZ();
+		return loc.getX() > min.getX() && loc.getX() <= max.getX() && loc.getY() > min.getY() && loc.getY() <= max.getY() && loc.getZ() > min.getZ()
+				&& loc.getZ() <= max.getZ();
 	}
 	
 	public Location[] getCorners()
@@ -171,13 +178,17 @@ public class Selection implements Iterable< Block >
 		double sy = min.getY();
 		double sz = min.getZ();
 		
-		for ( int x = 0; x < getWidth(); x++ )
+		double ex = max.getX();
+		double ey = max.getY();
+		double ez = max.getZ();
+		
+		for ( ; sx <= ex; sx++ )
 		{
-			for ( int y = 0; y < getHeight(); y++ )
+			for ( ; sy <= ey; sy++ )
 			{
-				for ( int z = 0; z < getDepth(); z++ )
+				for ( ; sz <= ez; sz++ )
 				{
-					blocks.add(new Location(w, sx + x, sy + y, sz + z).getBlock());
+					blocks.add(new Location(w, sx, sy, sz).getBlock());
 				}
 			}
 		}
@@ -216,6 +227,7 @@ public class Selection implements Iterable< Block >
 		public void remove()
 		{
 			blocks.remove(i);
+			i--;
 		}
 	}
 	
