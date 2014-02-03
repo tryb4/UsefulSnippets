@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
-public class OmmergUtils
+public class OmerrgUtils
 {
 	public static String rainbowChatColor(String string)
 	{
