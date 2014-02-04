@@ -43,7 +43,7 @@ public class Selection implements Iterable< Block >
 	
 	public boolean containsPoint(Location loc)
 	{
-		return loc.getX() > min.getX() && loc.getX() <= max.getX() && loc.getY() > min.getY() && loc.getY() <= max.getY() && loc.getZ() > min.getZ()
+		return loc.getX() >= min.getX() && loc.getX() <= max.getX() && loc.getY() >= min.getY() && loc.getY() <= max.getY() && loc.getZ() >= min.getZ()
 				&& loc.getZ() <= max.getZ();
 	}
 	
@@ -90,17 +90,17 @@ public class Selection implements Iterable< Block >
 	
 	public double getWidth()
 	{
-		return max.getX() - min.getX();
+		return max.getX() + 1 - min.getX();
 	}
 	
 	public double getHeight()
 	{
-		return max.getY() - min.getY();
+		return max.getY() + 1 - min.getY();
 	}
 	
 	public double getDepth()
 	{
-		return max.getZ() - min.getZ();
+		return max.getZ() + 1 - min.getZ();
 	}
 	
 	public double getVolume()
@@ -174,23 +174,28 @@ public class Selection implements Iterable< Block >
 		List< Block > blocks = new ArrayList< Block >();
 		
 		World w = max.getWorld();
-		double sx = min.getX();
-		double sy = min.getY();
-		double sz = min.getZ();
+		double x = min.getX();
+		double y = min.getY();
+		double z = min.getZ();
 		
-		double ex = max.getX();
-		double ey = max.getY();
-		double ez = max.getZ();
+		double ex = max.getX() + 1;
+		double ey = max.getY() + 1;
+		double ez = max.getZ() + 1;
 		
-		for ( ; sx <= ex; sx++ )
+		while (x < ex)
 		{
-			for ( ; sy <= ey; sy++ )
+			while (y < ey)
 			{
-				for ( ; sz <= ez; sz++ )
+				while (z < ez)
 				{
-					blocks.add(new Location(w, sx, sy, sz).getBlock());
+					blocks.add(new Location(w, x, y, z).getBlock());
+					z++;
 				}
+				y++;
+				z = min.getZ();
 			}
+			x++;
+			y = min.getY();
 		}
 		return blocks;
 	}
