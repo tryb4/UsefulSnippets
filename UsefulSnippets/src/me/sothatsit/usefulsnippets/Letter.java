@@ -490,6 +490,16 @@ public enum Letter
 		}
 	}
 	
+	public static int strHeight()
+	{
+		return 5;
+	}
+	
+	public static int strHeight(String[] str)
+	{
+		return ( strHeight() + 1 ) * str.length - 1;
+	}
+	
 	public static int strWidth(String str)
 	{
 		int w = 0;
@@ -501,6 +511,18 @@ public enum Letter
 		return ( w > 0 ? w - 1 : w );
 	}
 	
+	public static int strWidth(String[] str)
+	{
+		int width = 0;
+		for ( String s : str )
+		{
+			if ( strWidth(s) > width )
+				width = strWidth(s);
+		}
+		
+		return width;
+	}
+	
 	public static void centreString(String text, Material type, byte data, Location centre,
 			Direction dir)
 	{
@@ -508,6 +530,18 @@ public enum Letter
 		Location start = centre.subtract( ( width / 2 ) * dir.getX() , 0 , ( width / 2 )
 				* dir.getZ());
 		drawString(text , type , data , start , dir);
+	}
+	
+	public static void centreString(String[] text, Material type, byte data, Location centre,
+			Direction dir)
+	{
+		int height = 0;
+		for ( String s : text )
+		{
+			height += 1;
+			height += strHeight();
+			centreString(s , type , data , centre.clone().subtract(0 , height , 0) , dir);
+		}
 	}
 	
 	public static void drawString(String str, Material type, byte data, Location loc, Direction dir)
@@ -521,6 +555,17 @@ public enum Letter
 		}
 	}
 	
+	public static void drawString(String[] text, Material type, byte data, Location loc, Direction dir)
+	{
+		int height = 0;
+		for ( String s : text )
+		{
+			height += 1;
+			height += strHeight();
+			centreString(s , type , data , loc.clone().subtract(0 , height , 0) , dir);
+		}
+	}
+	
 	public static Letter fromCharacter(char character)
 	{
 		for ( Letter l : Letter.values() )
@@ -531,16 +576,6 @@ public enum Letter
 			}
 		}
 		return null;
-	}
-	
-	public static void clearStringCentred(String text, Location centre, Direction dir)
-	{
-		centreString(text , Material.AIR , (byte) 0 , centre , dir);
-	}
-	
-	public static void clearString(String text, Location loc, Direction dir)
-	{
-		drawString(text , Material.AIR , (byte) 0 , loc , dir);
 	}
 	
 	public static List< Letter > fromString(String string)
