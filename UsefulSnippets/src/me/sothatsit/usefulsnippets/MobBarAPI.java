@@ -26,9 +26,18 @@ public class MobBarAPI
 		return MobBarAPI.instance;
 	}
 	
-	public void setStatus(Player player, String text, int percent, boolean reset) throws IllegalArgumentException, SecurityException,
-			InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, NoSuchFieldException
+	public void setStatus(Player player, String text, int percent, boolean reset) throws Exception
 	{
+		if ( percent <= 0 )
+		{
+			percent = 1;
+		}
+		else
+			if ( percent > 100 )
+			{
+				throw new IllegalArgumentException("percent cannot be greater than 100, percent = " + percent);
+			}
+		
 		Dragon dragon = null;
 		
 		if ( dragonMap.containsKey(player.getName()) && !reset )
